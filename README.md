@@ -20,4 +20,4 @@
 - npm install @reduxjs/toolkit
 - npm install react-redux
 - npm i redux-persist
--
+- npm install @mui/material @emotion/react @emotion/styled
