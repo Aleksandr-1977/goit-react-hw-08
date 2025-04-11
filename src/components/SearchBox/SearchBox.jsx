@@ -1,7 +1,7 @@
 import css from './SearchBox.module.css';
 
 import { useDispatch } from 'react-redux';
-import { contactFilter } from '../../redux/filtersSlice';
+import { contactFilter } from '../../redux/filters/slice';
 import { useState } from 'react';
 
 const SearchBox = () => {
