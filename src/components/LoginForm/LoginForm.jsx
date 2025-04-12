@@ -20,12 +20,12 @@ const ContactSchema = Yup.object().shape({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+
   const user = useSelector(selectUser);
   const handleSubmit = (values, actions) => {
     dispatch(login(values))
       .unwrap()
       .then(response => {
-        // Используйте имя из ответа или из хранилища
         const userName = response?.user?.name || user?.name;
         toast.success(`Welcome, ${userName || 'User'}`);
       })
