@@ -1,7 +1,9 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import css from './RegistrationForm.module.css';
 import * as Yup from 'yup';
-// import { useDispatch } from 'react-redux';
+import { register } from '../../redux/auth/operations';
+import { useDispatch } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -16,15 +18,22 @@ const ContactSchema = Yup.object().shape({
       'Введите корректный адрес email.'
     )
     .required('Required'),
-  password: Yup.string().required('Required'),
+  password: Yup.string().min(7, 'Too short').required('Required'),
 });
 const RegistrationForm = () => {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  //   handleSubmit = (values, actions) => {
-  //     dispatch(register(values));
-  //     actions.resetForm();
-  //   };
+  const handleSubmit = (values, actions) => {
+    dispatch(register(values))
+      .unwrap()
+      .then(() => {
+        toast.success('Welcome');
+      })
+      .catch(() => {
+        toast.error(' Not valid !');
+      });
+    actions.resetForm();
+  };
   return (
     <Formik
       initialValues={{
@@ -32,18 +41,18 @@ const RegistrationForm = () => {
         email: '',
         password: '',
       }}
-      //   onSubmit={handleSubmit}
+      onSubmit={handleSubmit}
       validationSchema={ContactSchema}
     >
-      <Form className={css.form} autoComplete="off">
+      <Form className={css.form} autoComplete="on">
         <label className={css.label}>
           Username
-          <Field className={css.input} type="text" name="name" />
+          <Field className={css.input} type="text" name="name" id="name" />
           <ErrorMessage className={css.error} name="name" component="span" />
         </label>
         <label className={css.label}>
           Email
-          <Field className={css.input} type="email" name="email" />
+          <Field className={css.input} type="email" name="email" id="email" />
           <ErrorMessage className={css.error} name="email" component="span" />
         </label>
         <label className={css.label}>
@@ -58,6 +67,16 @@ const RegistrationForm = () => {
         <button className={css.btn} type="submit">
           Register
         </button>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              border: '1px solid rgb(45, 90, 236)',
+              padding: '16px',
+              color: '#00000',
+            },
+          }}
+        />
       </Form>
     </Formik>
   );

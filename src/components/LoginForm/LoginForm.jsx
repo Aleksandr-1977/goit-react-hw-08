@@ -1,7 +1,10 @@
-// import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import css from './LoginForm.module.css';
+import { login } from '../../redux/auth/operations';
+import toast, { Toaster } from 'react-hot-toast';
+import { selectUser } from '../../redux/auth/selectors';
 
 const ContactSchema = Yup.object().shape({
   email: Yup.string()
@@ -12,29 +15,38 @@ const ContactSchema = Yup.object().shape({
       'Введите корректный адрес email.'
     )
     .required('Required'),
-  password: Yup.string().required('Required'),
+  password: Yup.string().min(7, 'Too short').required('Required'),
 });
 
 const LoginForm = () => {
-  // const dispatch = useDispatch();
-
-  //   const handleSubmit = (values, actions) => {
-  //     dispatch(logIn(values));
-  //     actions.resetForm();
-  //   };
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const handleSubmit = (values, actions) => {
+    dispatch(login(values))
+      .unwrap()
+      .then(response => {
+        // Используйте имя из ответа или из хранилища
+        const userName = response?.user?.name || user?.name;
+        toast.success(`Welcome, ${userName || 'User'}`);
+      })
+      .catch(() => {
+        toast.error(' Not valid !');
+      });
+    actions.resetForm();
+  };
   return (
     <Formik
       initialValues={{
         email: '',
         password: '',
       }}
-      //   onSubmit={handleSubmit}
+      onSubmit={handleSubmit}
       validationSchema={ContactSchema}
     >
-      <Form className={css.form} autoComplete="off">
+      <Form className={css.form} autoComplete="on">
         <label className={css.label}>
           Email
-          <Field className={css.input} type="email" name="email" />
+          <Field className={css.input} type="email" name="email" id="email" />
           <ErrorMessage className={css.error} name="email" component="span" />
         </label>
         <label className={css.label}>
@@ -49,6 +61,16 @@ const LoginForm = () => {
         <button className={css.btn} type="submit">
           Log In
         </button>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              border: '1px solid rgb(45, 90, 236)',
+              padding: '16px',
+              color: '#00000',
+            },
+          }}
+        />
       </Form>
     </Formik>
   );
