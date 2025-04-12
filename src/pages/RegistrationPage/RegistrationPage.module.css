@@ -1,5 +1,6 @@
 .title {
   text-align: center;
+  text-decoration: 2px underline;
 }
 .container {
   max-width: 960px;
