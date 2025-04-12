@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import css from './LoginForm.module.css';
 import { login } from '../../redux/auth/operations';
 import toast, { Toaster } from 'react-hot-toast';
-import { selectUser } from '../../redux/auth/selectors';
 
 const ContactSchema = Yup.object().shape({
   email: Yup.string()
@@ -21,14 +20,10 @@ const ContactSchema = Yup.object().shape({
 const LoginForm = () => {
   const dispatch = useDispatch();
 
-  const user = useSelector(selectUser);
   const handleSubmit = (values, actions) => {
     dispatch(login(values))
       .unwrap()
-      .then(response => {
-        const userName = response?.user?.name || user?.name;
-        toast.success(`Welcome, ${userName || 'User'}`);
-      })
+      .then()
       .catch(() => {
         toast.error(' Not valid !');
       });

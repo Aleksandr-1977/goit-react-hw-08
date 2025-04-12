@@ -2,8 +2,11 @@ import css from './ContactForm.module.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contacts/operations';
+import { selectUser } from '../../redux/auth/selectors';
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
 
 const ContactSchema = Yup.object().shape({
   name: Yup.string()
@@ -27,9 +30,14 @@ const initialValues = {
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-
+  const user = useSelector(selectUser);
+  useEffect(() => {
+    const userName = user?.name;
+    if (userName) {
+      toast.success(`Welcome, ${userName}`);
+    }
+  }, [user]);
   const handleSubmit = (values, form) => {
-    console.log(values);
     const userAction = addContact({
       id: nanoid(),
       name: values.name,
@@ -58,6 +66,16 @@ const ContactForm = () => {
         <button className={css.btn} type="submit">
           Add contact
         </button>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              border: '1px solid rgb(45, 90, 236)',
+              padding: '16px',
+              color: '#00000',
+            },
+          }}
+        />
       </Form>
     </Formik>
   );
