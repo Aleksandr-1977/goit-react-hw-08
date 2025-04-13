@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import css from './LoginForm.module.css';
@@ -13,8 +13,10 @@ const ContactSchema = Yup.object().shape({
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
       'Введите корректный адрес email.'
     )
-    .required('Required'),
-  password: Yup.string().min(7, 'Too short').required('Required'),
+    .required('Обязательное поле'),
+  password: Yup.string()
+    .min(7, 'Слишком короткий')
+    .required('Обязательное поле'),
 });
 
 const LoginForm = () => {
@@ -25,7 +27,7 @@ const LoginForm = () => {
       .unwrap()
       .then()
       .catch(() => {
-        toast.error(' Not valid !');
+        toast.error(' Ошибка !');
       });
     actions.resetForm();
   };

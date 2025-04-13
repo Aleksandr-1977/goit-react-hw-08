@@ -10,17 +10,17 @@ import { useEffect } from 'react';
 
 const ContactSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, 'Too short')
-    .max(50, 'Too long')
-    .required('Required'),
+    .min(3, 'Слишком короткий')
+    .max(50, 'Слишком длинный')
+    .required('Обязательное поле'),
   number: Yup.string()
-    .min(9, 'Too short')
-    .max(12, 'Too long')
+    .min(9, 'Слишком короткий')
+    .max(12, 'Слишком длинный')
     .matches(
       /^[0-9]{3}-[0-9]{2}-[0-9]{2}$/,
-      'Invalid number format. Example: 111-11-11'
+      'Не корректный формат номера. Пример: 111-11-11'
     )
-    .required('Required'),
+    .required('Обязательное поле'),
 });
 
 const initialValues = {
@@ -34,7 +34,7 @@ const ContactForm = () => {
   useEffect(() => {
     const userName = user?.name;
     if (userName) {
-      toast.success(`Welcome, ${userName}`);
+      toast.success(`Добро пожаловать, ${userName}`);
     }
   }, [user]);
   const handleSubmit = (values, form) => {

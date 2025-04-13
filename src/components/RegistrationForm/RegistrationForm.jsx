@@ -7,18 +7,20 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const ContactSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, 'Too short')
-    .max(50, 'Too long')
-    .required('Required'),
+    .min(3, 'Слишком короткий')
+    .max(50, 'Слишком длинный')
+    .required('Обязательное поле'),
   email: Yup.string()
-    .min(7, 'Too short')
-    .max(50, 'Too long')
+    .min(7, 'Слишком короткий')
+    .max(50, 'Слишком длинный')
     .matches(
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
       'Введите корректный адрес email.'
     )
-    .required('Required'),
-  password: Yup.string().min(7, 'Too short').required('Required'),
+    .required('Обязательное поле'),
+  password: Yup.string()
+    .min(7, 'Слишком короткий')
+    .required('Обязательное поле'),
 });
 const RegistrationForm = () => {
   const dispatch = useDispatch();
@@ -27,10 +29,10 @@ const RegistrationForm = () => {
     dispatch(register(values))
       .unwrap()
       .then(() => {
-        toast.success('Welcome');
+        toast.success('Добро пожаловать');
       })
       .catch(() => {
-        toast.error(' Not valid !');
+        toast.error(' Ошибка !');
       });
     actions.resetForm();
   };
